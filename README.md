@@ -40,5 +40,5 @@ Para actualizar yt-dlp alcanza con volver a construir (pip lo actualiza); para f
   (y los lunes si salió un yt-dlp nuevo) y lo publica como Release acá, en `cristianeze16/dintube-desktop` (público).
 - Al abrir, DinTube compara su `version.txt` con la última Release. Si hay una más nueva pregunta,
   la baja, se instala en silencio y se vuelve a abrir.
-- Builds locales con `construir.bat` salen como versión 0 (siempre van a ofrecer actualizar a la publicada).
+- Builds locales con `construir.bat` salen como versión 0.0.0 (siempre van a ofrecer actualizar a la publicada).
 - Se instala por usuario (`%LOCALAPPDATA%\Programs\DinTube`), sin pedir admin.

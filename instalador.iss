@@ -1,4 +1,4 @@
-; Instalador de DinTube (Inno Setup 6). Lo compila construir.ps1 con /DVersion=1.0.N
+; Instalador de DinTube (Inno Setup 6). Lo compila construir.ps1 con /DVersion=3.0.N
 #ifndef Version
   #define Version "1.0.0"
 #endif

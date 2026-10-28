@@ -56,9 +56,9 @@ def main():
     with open(ruta, "w", encoding="utf-8", newline="") as f:
         f.write(codigo)
 
-    # Número de versión (lo pone la Action de GitHub; en builds locales es 0)
+    # Número de versión, ej. "3.0.4" (lo pone la Action de GitHub; en builds locales es 0.0.0)
     with open(os.path.join(AQUI, "build", "version.txt"), "w", encoding="utf-8") as f:
-        f.write(os.environ.get("DINTUBE_VERSION", "0"))
+        f.write(os.environ.get("DINTUBE_VERSION", "0.0.0"))
 
     # Ícono .ico para el exe y el instalador, a partir del de la web
     from PIL import Image

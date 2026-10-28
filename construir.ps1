@@ -1,6 +1,7 @@
 ﻿# Arma DinTube de escritorio: dist\DinTube\DinTube.exe y, si está Inno Setup, instalador\DinTube-Setup.exe
 # Uso: doble click en construir.bat (o .\construir.ps1 [-Origen C:\dev\dintube])
-param([string]$Origen = (Join-Path $PSScriptRoot "..\dintube"), [int]$Version = 0)
+# -Version: "3.0.4" (lo calcula la Action de GitHub a partir de VERSION en dintube; en builds locales 0.0.0)
+param([string]$Origen = (Join-Path $PSScriptRoot "..\dintube"), [string]$Version = "0.0.0")
 $ErrorActionPreference = "Stop"
 $Origen = (Resolve-Path $Origen).Path  # antes de cambiar de carpeta: puede ser relativa
 Set-Location $PSScriptRoot
@@ -15,7 +16,7 @@ $py = ".venv\Scripts\python.exe"
 & $py -m pip install -q --upgrade -r (Join-Path $Origen "requirements.txt") -r requirements-escritorio.txt
 if ($LASTEXITCODE) { throw "Falló pip install" }
 
-$env:DINTUBE_VERSION = "$Version"
+$env:DINTUBE_VERSION = $Version
 
 # 2. Copiar y parchear servidor.py, descargar.py y web/
 & $py preparar.py $Origen
@@ -53,7 +54,7 @@ Write-Host "`nApp lista: dist\DinTube\DinTube.exe"
 $iscc = @("${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe", "$env:ProgramFiles\Inno Setup 6\ISCC.exe",
           "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
 if ($iscc) {
-    & $iscc "/DVersion=1.0.$Version" instalador.iss
+    & $iscc "/DVersion=$Version" instalador.iss
     if ($LASTEXITCODE) { throw "Falló Inno Setup" }
     Write-Host "Instalador listo: instalador\DinTube-Setup.exe"
 } else {

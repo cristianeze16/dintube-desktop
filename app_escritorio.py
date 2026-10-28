@@ -65,12 +65,17 @@ def levantar_servidor():
 REPO_RELEASES = "cristianeze16/dintube-desktop"
 
 
+def como_tupla(version):
+    # "v3.0.2" -> (3, 0, 2), para comparar bien: 3.0.10 es más nueva que 3.0.9
+    return tuple(int(n) for n in version.strip().lstrip("v").split("."))
+
+
 def version_local():
     try:
         with open(os.path.join(BASE, "version.txt"), encoding="utf-8") as f:
-            return int(f.read().strip())
+            return como_tupla(f.read())
     except (OSError, ValueError):
-        return 0
+        return (0,)
 
 
 def buscar_actualizacion(ventana):
@@ -82,12 +87,16 @@ def buscar_actualizacion(ventana):
         r = requests.get(f"https://api.github.com/repos/{REPO_RELEASES}/releases/latest", timeout=10)
         r.raise_for_status()
         release = r.json()
-        nueva = int(release["tag_name"].lstrip("v"))
+        etiqueta = release["tag_name"]
+        # Las etiquetas viejas eran un número solo (v1, v2, y v4 fue el puente a 3.0.0): esas no se comparan
+        if "." not in etiqueta:
+            return
+        nueva = etiqueta.lstrip("v")
         instalador = next(a for a in release["assets"] if a["name"].lower().endswith(".exe"))
+        if como_tupla(nueva) <= version_local():
+            return
     except Exception:
         return  # sin internet, sin releases, etc.: se prueba la próxima vez
-    if nueva <= version_local():
-        return
     if not ventana.create_confirmation_dialog(
             "Actualización de DinTube",
             f"Hay una versión nueva de DinTube (versión {nueva}).\n\n"
