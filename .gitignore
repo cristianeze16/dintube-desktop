@@ -1,0 +1,7 @@
+.venv/
+build/
+dist/
+instalador/
+*.spec
+__pycache__/
+*.tmp
